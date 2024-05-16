@@ -1,0 +1,32 @@
+plugins {
+    id("java")
+    id("maven-publish")
+    id("java-library")
+}
+
+group = "com.moyanshushe"
+version = "0.0.1-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "com.moyanshushe"
+            artifactId = "global-processing"
+            version = "0.0.1-SNAPSHOT"
+            from(components["java"])
+        }
+    }
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
