@@ -43,7 +43,7 @@ public class OrderController {
                         : Result.error(OrderConstant.ORDER_ADD_FAIL));
     }
 
-    @PostMapping("/get")
+    @PostMapping("/fetch")
     public ResponseEntity<Result> getOrder(
             @RequestBody OrderSpecification specification) {
         Page<Order> result = service.get(specification);

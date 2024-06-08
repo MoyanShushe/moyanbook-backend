@@ -27,10 +27,10 @@ public interface CommonServiceClientForAdmin {
     @PostMapping("/address/get")
     ResponseEntity<Result> getAddress (@RequestBody AddressForQuery addressForQuery);
 
-    @PostMapping("/label/fetch")
+    @PostMapping("/label/get")
     ResponseEntity<Result> queryLabels(@RequestBody LabelForQuery labelForQuery);
 
-    @PostMapping("/order/get")
+    @PostMapping("/order/fetch")
     Page<Item> getOrder(@RequestBody OrderSpecification specification);
 
 }

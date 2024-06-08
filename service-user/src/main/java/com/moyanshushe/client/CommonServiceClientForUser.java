@@ -50,10 +50,10 @@ public interface CommonServiceClientForUser {
     @PostMapping("/file/upload/image")
     CompletableFuture<Result> uploadImage(@RequestParam("file") MultipartFile file);
 
-    @PostMapping("/label/fetch")
+    @PostMapping("/label/get")
     ResponseEntity<Result> queryLabels(@RequestBody LabelForQuery labelForQuery);
 
-    @PostMapping("/order/get")
+    @PostMapping("/order/fetch")
     Page<Item> getOrder(@RequestBody OrderSpecification specification);
 
     @PostMapping("/order/add")

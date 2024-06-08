@@ -58,7 +58,7 @@ public class LabelController {
      * @return 返回标签查询结果
      */
     @Api
-    @PostMapping("/fetch")
+    @PostMapping("/get")
     public ResponseEntity<Result> queryLabels(LabelForQuery labelForQuery) {
         Page<LabelSubstance> result = labelService.queryLabel(labelForQuery);
 
