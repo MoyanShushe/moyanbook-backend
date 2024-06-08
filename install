@@ -1,0 +1,43 @@
+wget https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-x64_bin.tar.gz
+
+tar -zxvf graalvm-jdk-21_linux-x64_bin.tar.gz
+
+echo "export JAVA_HOME=/softwares/java/graalvm-jdk-21.0.3+7.1" >> /etc/profile
+echo "export PATH=/softwares/java/graalvm-jdk-21.0.3+7.1/bin:$PATH" >> /etc/profile
+source /etc/profile
+
+yum install docker -y
+
+docker run -d \
+    --name mysql-moyan \
+    -p 3306:3306 \
+    -v /app/mysql/data:/var/lib/mysql \
+    -e MYSQL_ROOT_PASSWORD=191019sJs_MySQL \
+    -e MYSQL_USER=hacoj \
+    -e MYSQL_PASSWORD=ThisIsHacoj \
+    mysql
+
+
+docker run -d \
+    --name redis-moyan \
+    -p 19104:6379 \
+    -v /app/redis/data:/data \
+    -v /app/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro \
+    redis redis-server /usr/local/etc/redis/redis.conf
+
+
+wget https://github.com/alibaba/nacos/releases/download/2.3.2/nacos-server-2.3.2.tar.gz
+
+tar -xzvf *
+
+nohup java -jar common-service-0.0.1-SNAPSHOT.jar > common.log &
+
+nohup java -jar user-service-0.0.1-SNAPSHOT.jar > user.log &
+
+docker exec mysql-moyan sh -c 'exec mysqldump item_sell_db -uroot -p191019sJs_MySQL' > /app/mysql/backup/mysql-moyan_`date +%F`.sql
+
+crontab -e
+
+0 2 * * * docker exec mysql-moyan sh -c 'exec mysqldump item_sell_db -uroot -p191019sJs_MySQL' > /app/mysql/backup/mysql-moyan_`date +%F`.sql
+0 2 * * * find app/mysql/backup/ -mtime + 5 -name "*.sql" -delete
+
