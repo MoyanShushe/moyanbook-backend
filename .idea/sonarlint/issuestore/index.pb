@@ -151,3 +151,7 @@ Lcommon/src/main/java/com/moyanshushe/model/cnoverter/UserPhoneConverter.java,7
 Ocommon/src/main/java/com/moyanshushe/model/cnoverter/UserPasswordConverter.java,d\8\d8f2bb048dc60b5f4a610952bfe98d7bf4874cde
 |
 Lcommon/src/main/java/com/moyanshushe/model/cnoverter/UserEmailConverter.java,4\d\4d162551e89dff445d4b3f115a3ad07dc87514fd
+Å
+Qservice-user/src/main/java/com/moyanshushe/client/CommonServiceClientForUser.java,d\9\d9eba84772c3fa6a78aad1ec45e4fbd83719668a
+É
+Sservice-admin/src/main/java/com/moyanshushe/client/CommonServiceClientForAdmin.java,7\7\771a67dabc75e700eae86304ef1b4836481abf60

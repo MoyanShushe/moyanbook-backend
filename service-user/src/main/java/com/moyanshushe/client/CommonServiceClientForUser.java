@@ -29,9 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.concurrent.CompletableFuture;
 
-@FeignClient(value = "common-service",
-        qualifiers = "common-service-feign-user")
-public interface CommonServiceClient {
+@FeignClient(value = "common-service")
+public interface CommonServiceClientForUser {
 
     @PostMapping("/item/fetch")
     Page<Item> fetchItems(@RequestBody ItemSpecification specification);

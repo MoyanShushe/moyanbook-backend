@@ -5,7 +5,6 @@ import com.moyanshushe.model.cnoverter.AddressPasswordConverter;
 import org.babyfish.jimmer.jackson.JsonConverter;
 import org.babyfish.jimmer.sql.*;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.util.List;
 
@@ -93,12 +92,12 @@ public interface Admin {
     /**
      * 负责区域
      */
-    @ManyToMany(mappedBy = "admin")
-//    @JoinTable(
-//            name = "ADMIN_ADDRESS_RESPONSIBILITY_MAPPING",
-//            joinColumnName = "admin_id",
-//            inverseJoinColumnName = "address_id"
-//    )
+    @ManyToMany()
+    @JoinTable(
+            name = "ADMIN_ADDRESS_RESPONSIBILITY_MAPPING",
+            joinColumnName = "admin_id",
+            inverseJoinColumnName = "address_id"
+    )
     List<Address> responsibilityArea();
 
     /**

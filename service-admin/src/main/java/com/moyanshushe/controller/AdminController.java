@@ -6,22 +6,15 @@ package com.moyanshushe.controller;
  */
 
 
-import com.moyanshushe.client.CommonServiceClient;
+import com.moyanshushe.client.CommonServiceClientForAdmin;
 import com.moyanshushe.constant.AccountConstant;
 import com.moyanshushe.constant.JwtClaimsConstant;
 import com.moyanshushe.constant.VerifyConstant;
 import com.moyanshushe.model.Result;
 import com.moyanshushe.model.dto.address.AddressForQuery;
 import com.moyanshushe.model.dto.admin.*;
-import com.moyanshushe.model.dto.coupon.CouponSpecification;
-import com.moyanshushe.model.dto.item.ItemForAdd;
-import com.moyanshushe.model.dto.item.ItemForDelete;
-import com.moyanshushe.model.dto.item.ItemForUpdate;
 import com.moyanshushe.model.dto.item.ItemSpecification;
 import com.moyanshushe.model.dto.label.LabelForQuery;
-import com.moyanshushe.model.dto.order.OrderForAdd;
-import com.moyanshushe.model.dto.order.OrderForDelete;
-import com.moyanshushe.model.dto.order.OrderForUpdate;
 import com.moyanshushe.model.dto.order.OrderSpecification;
 import com.moyanshushe.model.entity.Admin;
 import com.moyanshushe.properties.JwtProperties;
@@ -33,7 +26,6 @@ import org.babyfish.jimmer.sql.ast.tuple.Tuple2;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 
@@ -44,16 +36,15 @@ import java.util.HashMap;
 public class AdminController {
     private final AdminService adminService;
     private final JwtProperties jwtProperties;
-    private final CommonServiceClient commonServiceClient;
+    private final CommonServiceClientForAdmin commonServiceClientForAdmin;
 
     // 构造函数：初始化用户服务和JWT属性
     public AdminController(AdminService adminService,
                           JwtProperties jwtProperties,
-                           @Qualifier("common-service-feign-admin")
-                           CommonServiceClient commonServiceClient) {
+                           CommonServiceClientForAdmin commonServiceClientForAdmin) {
         this.adminService = adminService;
         this.jwtProperties = jwtProperties;
-        this.commonServiceClient = commonServiceClient;
+        this.commonServiceClientForAdmin = commonServiceClientForAdmin;
 
         log.info("AdminController initialized");
     }
@@ -192,7 +183,7 @@ public class AdminController {
     @Api
     @PostMapping("/item/fetch")
     public ResponseEntity<Result> fetchItem(@RequestBody ItemSpecification specification) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.fetchItems(specification)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForAdmin.fetchItems(specification)));
     }
 
 
@@ -205,7 +196,7 @@ public class AdminController {
     @Api
     @PostMapping("/label/fetch")
     public ResponseEntity<Result> fetchLabels(@RequestBody LabelForQuery label) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.queryLabels(label)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForAdmin.queryLabels(label)));
     }
 
     /**
@@ -217,7 +208,7 @@ public class AdminController {
     @Api
     @PostMapping("/address/get")
     public ResponseEntity<Result> getAddress(@RequestBody AddressForQuery addressForQuery) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.getAddress(addressForQuery)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForAdmin.getAddress(addressForQuery)));
     }
 
     /**
@@ -229,6 +220,6 @@ public class AdminController {
     @Api
     @PostMapping("/order/fetch")
     public ResponseEntity<Result> getOrder(@RequestBody OrderSpecification specification) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.getOrder(specification)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForAdmin.getOrder(specification)));
     }
 }

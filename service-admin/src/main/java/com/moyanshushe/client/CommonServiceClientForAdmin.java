@@ -18,9 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-@FeignClient(value = "common-service",
-        qualifiers = "common-service-feign-admin")
-public interface CommonServiceClient {
+@FeignClient(value = "common-service")
+public interface CommonServiceClientForAdmin {
 
     @PostMapping("/item/fetch")
     Page<Item> fetchItems(@RequestBody ItemSpecification specification);

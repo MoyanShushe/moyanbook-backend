@@ -41,15 +41,15 @@ public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
     private final JwtProperties jwtProperties;
-    private final CommonServiceClient commonServiceClient;
+    private final CommonServiceClientForUser commonServiceClientForUser;
 
     // 构造函数：初始化用户服务和JWT属性
     public UserController(UserService userService,
                           JwtProperties jwtProperties,
-                          CommonServiceClient commonServiceClient) {
+                          CommonServiceClientForUser commonServiceClientForUser) {
         this.userService = userService;
         this.jwtProperties = jwtProperties;
-        this.commonServiceClient = commonServiceClient;
+        this.commonServiceClientForUser = commonServiceClientForUser;
 
         log.info("UserController initialized");
     }
@@ -184,7 +184,7 @@ public class UserController {
     @Api
     @PostMapping("/item/fetch")
     public ResponseEntity<Result> fetchItem(@RequestBody ItemSpecification specification) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.fetchItems(specification)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.fetchItems(specification)));
     }
 
     /**
@@ -199,7 +199,7 @@ public class UserController {
     public ResponseEntity<Result> addItem(@RequestBody ItemForAdd itemForAdd) {
         // TODO 控制用户只能操作自己的数据
 
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.addItem(itemForAdd)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.addItem(itemForAdd)));
     }
 
     /**
@@ -211,7 +211,7 @@ public class UserController {
     @Api
     @PostMapping("/item/update")
     public ResponseEntity<Result> updateItem(@RequestBody ItemForUpdate itemForUpdate) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.updateItem(itemForUpdate)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.updateItem(itemForUpdate)));
     }
 
     /**
@@ -223,7 +223,7 @@ public class UserController {
     @Api
     @PostMapping("/item/delete")
     public ResponseEntity<Result> deleteItem(@RequestBody ItemForDelete itemForDelete) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.deleteItems(itemForDelete)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.deleteItems(itemForDelete)));
     }
 
     /**
@@ -235,7 +235,7 @@ public class UserController {
     @Api
     @PostMapping("/label/fetch")
     public ResponseEntity<Result> fetchLabels(@RequestBody LabelForQuery label) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.queryLabels(label)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.queryLabels(label)));
     }
 
     /**
@@ -247,7 +247,7 @@ public class UserController {
     @Api
     @PostMapping("/file/upload/image")
     public ResponseEntity<Result> uploadImage(@RequestParam("file") MultipartFile file) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.uploadImage(file)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.uploadImage(file)));
     }
 
     /**
@@ -259,7 +259,7 @@ public class UserController {
     @Api
     @PostMapping("/address/get")
     public ResponseEntity<Result> getAddress(@RequestBody AddressForQuery addressForQuery) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.getAddress(addressForQuery)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.getAddress(addressForQuery)));
     }
 
     /**
@@ -271,7 +271,7 @@ public class UserController {
     @Api
     @PostMapping("/order/fetch")
     public ResponseEntity<Result> getOrder(@RequestBody OrderSpecification specification) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.getOrder(specification)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.getOrder(specification)));
     }
 
     /**
@@ -283,7 +283,7 @@ public class UserController {
     @Api
     @PostMapping("/order/add")
     public ResponseEntity<Result> addOrder(@RequestBody OrderForAdd itemForAdd) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.addOrder(itemForAdd)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.addOrder(itemForAdd)));
     }
 
     /**
@@ -295,7 +295,7 @@ public class UserController {
     @Api
     @PostMapping("/order/update")
     public ResponseEntity<Result> updateOrder(@RequestBody OrderForUpdate itemForUpdate) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.updateOrder(itemForUpdate)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.updateOrder(itemForUpdate)));
     }
 
     /**
@@ -307,7 +307,7 @@ public class UserController {
     @Api
     @PostMapping("/order/delete")
     public ResponseEntity<Result> deleteOrder(@RequestBody OrderForDelete itemForDelete) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.deleteOrder(itemForDelete)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.deleteOrder(itemForDelete)));
     }
 
     /**
@@ -320,6 +320,6 @@ public class UserController {
     @PostMapping("/coupon/get")
     public ResponseEntity<Result> getCoupon(@RequestBody CouponSpecification specification) {
         // 调用commonServiceClient的getCoupon方法获取优惠券信息，并将结果封装成成功响应返回
-        return ResponseEntity.ok().body(Result.success(commonServiceClient.getCoupon(specification)));
+        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.getCoupon(specification)));
     }
 }
