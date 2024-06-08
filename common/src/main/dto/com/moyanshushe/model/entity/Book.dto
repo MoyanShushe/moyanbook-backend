@@ -1,0 +1,80 @@
+export com.moyanshushe.model.entity.Book
+    -> package com.moyanshushe.model.dto.book
+
+input BookForAdd {
+    id
+    name
+    price
+    description
+    status
+
+    images {
+        imageUrl
+    }
+
+    userId
+
+    labels {
+        id
+    }
+}
+
+BookForDelete {
+    ids: MutableList<Int?>
+}
+
+BookForUpdate {
+    id
+    name
+    price
+    description
+    status
+
+    user {
+        id
+    }
+
+    labels {
+        id
+    }
+}
+
+BookSubstance {
+    id
+    name
+    price
+    description
+    status
+
+    images {
+        imageUrl
+    }
+
+    user {
+        name
+    }
+
+    labels {
+        name
+    }
+}
+
+
+specification BookSpecification {
+    id
+    like(name)
+    le(price) as maxPrice
+    ge(price) as minPrice
+    status
+
+    flat(user) {
+        valueIn(id) as userIds
+    }
+
+    flat(labels) {
+        valueIn(id) as labelIds
+    }
+
+    page: Int?
+    pageSize: Int?
+}

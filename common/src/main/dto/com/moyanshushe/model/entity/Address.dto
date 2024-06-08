@@ -1,0 +1,18 @@
+export com.moyanshushe.model.entity.Address
+    -> package com.moyanshushe.model.dto.address
+
+input AddressSubstance {
+    id
+    address
+}
+
+input AddressForQuery {
+    id
+    address ?
+    page: Int?
+    pageSize: Int?
+}
+
+AddressForDelete {
+    ids: MutableList<Int?>
+}

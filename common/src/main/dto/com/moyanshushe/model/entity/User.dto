@@ -1,0 +1,40 @@
+export com.moyanshushe.model.entity.User
+    -> package com.moyanshushe.model.dto.user
+
+input unsafe UserForVerify {
+    id
+    phone!
+    email!
+}
+
+input UserForRegister {
+    id
+    name
+    email
+    password
+    captcha: String
+}
+
+input UserForLogin {
+    id
+    name
+    phone
+    email
+    password
+}
+
+UserForUpdate {
+    id
+    name
+    gender
+    age
+    status
+    profileUrl
+}
+
+UserForBinding {
+    id
+    phone
+    email
+    captcha: String
+}

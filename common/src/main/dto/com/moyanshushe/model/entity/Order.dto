@@ -1,0 +1,41 @@
+export com.moyanshushe.model.entity.Order
+    -> package com.moyanshushe.model.dto.order
+
+input OrderForAdd {
+    userId
+    items {
+        id
+    }
+    createTime?
+}
+
+OrderForUpdate {
+    orderId
+    userId
+    items {
+        id
+    }
+}
+
+OrderForDelete {
+    ids: MutableList<Int?>
+}
+
+OrderSubstance {
+    userId
+    orderId
+    status
+    items {
+        id
+    }
+    createTime
+}
+
+specification OrderSpecification {
+    orderId
+    userId
+    status
+    itemId: Int?
+    page: Int?
+    pageSize: Int?
+}

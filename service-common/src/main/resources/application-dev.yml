@@ -1,0 +1,99 @@
+# 配置数据源
+moyan:
+  datasource:
+    # MySQL驱动类名
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 数据库连接URL
+    url: jdbc:mysql://localhost:3306/book_sell_db
+    # 数据库用户名
+    username: root
+    # 数据库密码
+    password: 191019sJs_MySQL
+    # 数据源类型，使用Druid连接池
+    type: com.alibaba.druid.pool.DruidDataSource
+  # Redis配置
+  data:
+    redis:
+      # Redis连接地址
+      host: "localhost"
+      # Redis端口
+      port: 19104
+      # 默认数据库索引
+      database: 0
+      # Redis密码
+      password: 191019sJs_redis
+      # 连接超时时间
+      connect-timeout: 5s
+      # 读取操作超时时间
+      timeout: 5s
+      lettuce:
+        # 连接池配置
+        pool:
+          # 最小空闲连接数
+          min-idle: 0
+          # 最大空闲连接数
+          max-idle: 8
+          # 最大活动连接数
+          max-active: 8
+          # 从连接池获取连接的最大超时时间
+          max-wait: -1ms
+  # 邮件服务配置
+  mail:
+    protocol: smtp
+    host: smtp.qq.com
+    port: 587
+    username: 3242541948@qq.com
+    password: uodqzienfjhocjhc
+    test-connection: false
+    properties:
+      mail:
+        smtp:
+          auth: true
+        debug: false
+        mime:
+          parameterization: false
+    default-encoding: UTF-8
+    # 常用工具类配置
+
+  jwt:
+    # 管理员接口JWT签名密钥
+    admin-secret-key: hacoj
+    # 管理员接口JWT有效期
+    admin-ttl: 7200000
+    # 管理员接口请求头中JWT的字段名
+    admin-token-name: token
+
+    # 用户接口JWT签名密钥
+    user-secret-key: HACOJ
+    # 用户接口JWT有效期
+    user-ttl: 7200000
+    # 用户接口请求头中JWT的字段名
+    user-token-name: token
+
+# 服务器配置
+server:
+  port: 19202
+
+# Jimmer ORM配置
+jimmer:
+  dialect: org.babyfish.jimmer.sql.dialect.MySqlDialect
+  client:
+    openapi:
+      path: /openapi.yml
+      ui-path: /openapi.html
+      properties:
+        info:
+          title: My Web Service
+          description:
+            Restore the DTO explosion that was
+             eliminated by server-side developers
+          version: 1.0
+
+
+
+  # 阿里云OSS配置
+#  alioss:
+#    access-key-id: ${sky.alioss.access-key-id}
+#    access-key-secret: ${sky.alioss.access-key-secret}
+#    bucket-name: ${sky.alioss.bucket-name}
+#    endpoint: ${sky.alioss.endpoint}
