@@ -1,0 +1,17 @@
+
+@	java:S106"+Replace this use of System.out by a logger.(Îñë
+Q	java:S125*"<This block of commented-out lines of code should be removed.(€òº
+W
+java:S1128"BRemove this unused import 'com.moyanshushe.constant.FileConstant'.(Õœ¯3
+\
+java:S1128"GRemove this unused import 'com.moyanshushe.properties.OutSideProperty'.(ÁÈù;
+^
+java:S1128	"HRemove this unused import 'org.springframework.context.annotation.Bean'.(‚î‰Ş
+?
+java:S1128")Remove this unused import 'java.io.File'.(†Ğ¥Å
+J
+java:S1128"4Remove this unused import 'java.io.FileInputStream'.(˜³ÉÓ
+J
+java:S1128"/Remove this unused import 'java.io.FileReader'.(Â¡¢äşÿÿÿÿ
+K
+java:S1128"0Remove this unused import 'java.io.IOException'.(ªº»Úıÿÿÿÿ

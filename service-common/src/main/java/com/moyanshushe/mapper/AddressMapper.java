@@ -12,6 +12,8 @@ import org.babyfish.jimmer.sql.ast.mutation.SimpleSaveResult;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /*
  * Author: Hacoj
  * Version: 1.0
@@ -31,6 +33,14 @@ public class AddressMapper {
 
     public SimpleSaveResult<Address> add(Address entity) {
         return jsqlClient.getEntities().save(entity);
+    }
+
+    public Optional<AddressSubstance> queryOneByAddress(String address) {
+        return jsqlClient.createQuery(table).where(
+                table.address().eq(address)
+        ).select(
+                table.fetch(AddressSubstance.class)
+        ).execute().stream().findFirst();
     }
 
     public SimpleSaveResult<Address> update(Address entity) {

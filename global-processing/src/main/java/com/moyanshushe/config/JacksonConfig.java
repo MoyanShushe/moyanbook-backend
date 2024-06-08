@@ -1,9 +1,6 @@
 package com.moyanshushe.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.babyfish.jimmer.jackson.ImmutableModule;
 
 /*
  * Author: Hacoj

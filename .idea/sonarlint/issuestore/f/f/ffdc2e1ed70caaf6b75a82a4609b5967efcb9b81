@@ -1,0 +1,9 @@
+
+‚
+java:S18543":Remove this useless assignment to local variable "result".(½í­ıÿÿÿÿ8ı¬®ÿ1J$e64630df-e98f-4c28-9ce9-af6ac78e0e41
+s
+java:S14813"+Remove this unused "result" local variable.(½í­ıÿÿÿÿ8ı¬®ÿ1J$d77d3c2b-93bc-4da3-abdc-c6e4e2c12a79
+Š
+java:S1128"BRemove this unused import 'com.moyanshushe.model.entity.Fetchers'.(¶¯ğ°ùÿÿÿÿ8·´º®ÿ1J$05236eeb-3036-4401-bb97-0683f2b94cf2
+›
+java:S1128"SRemove this unused import 'org.springframework.beans.factory.annotation.Autowired'.(¡¸Îùÿÿÿÿ8¸´º®ÿ1J$466be983-d491-49fd-aa4c-53b47ed33453

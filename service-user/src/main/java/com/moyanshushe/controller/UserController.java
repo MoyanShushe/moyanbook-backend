@@ -68,8 +68,8 @@ public class UserController {
         boolean success = this.userService.userRegister(userForRegister);
 
         return success ?
-                ResponseEntity.ok(Result.success(AccountConstant.USER_REGISTER_SUCCESS))
-                : ResponseEntity.badRequest().body(Result.error(AccountConstant.USER_REGISTER_FAILURE));
+                ResponseEntity.ok(Result.success(AccountConstant.ACCOUNT_REGISTER_SUCCESS))
+                : ResponseEntity.badRequest().body(Result.error(AccountConstant.ACCOUNT_REGISTER_FAILURE));
     }
 
     /**
@@ -94,7 +94,7 @@ public class UserController {
             return ResponseEntity.ok(Result.success(new Tuple2<>(user, jwt)));
 
         } else {
-            return ResponseEntity.status(401).body(Result.error(AccountConstant.USER_LOGIN_FAILURE));
+            return ResponseEntity.status(401).body(Result.error(AccountConstant.ACCOUNT_LOGIN_FAILURE));
         }
     }
 
@@ -112,8 +112,8 @@ public class UserController {
         boolean isChanged = this.userService.userUpdate(userForUpdate);
 
         return isChanged
-                ? ResponseEntity.ok(Result.success(AccountConstant.USER_CHANGE_SUCCESS))
-                : ResponseEntity.badRequest().body(Result.error(AccountConstant.USER_CHANGE_FAILURE));
+                ? ResponseEntity.ok(Result.success(AccountConstant.ACCOUNT_CHANGE_SUCCESS))
+                : ResponseEntity.badRequest().body(Result.error(AccountConstant.ACCOUNT_CHANGE_FAILURE));
     }
 
     @Api
@@ -124,8 +124,8 @@ public class UserController {
         boolean isUpdated = this.userService.userUpdatePassword(userForUpdatePassword);
 
         return isUpdated
-                ? ResponseEntity.ok(Result.success(AccountConstant.USER_CHANGE_SUCCESS))
-                : ResponseEntity.badRequest().body(Result.error(AccountConstant.USER_CHANGE_FAILURE));
+                ? ResponseEntity.ok(Result.success(AccountConstant.ACCOUNT_CHANGE_SUCCESS))
+                : ResponseEntity.badRequest().body(Result.error(AccountConstant.ACCOUNT_CHANGE_FAILURE));
     }
 
     /**
@@ -143,8 +143,8 @@ public class UserController {
         boolean bindSuccess = this.userService.bind(userForBinding);
 
         return bindSuccess
-                ? ResponseEntity.ok(Result.success(AccountConstant.USER_BIND_SUCCESS))
-                : ResponseEntity.badRequest().body(Result.error(AccountConstant.USER_BIND_FAILURE));
+                ? ResponseEntity.ok(Result.success(AccountConstant.ACCOUNT_BIND_SUCCESS))
+                : ResponseEntity.badRequest().body(Result.error(AccountConstant.ACCOUNT_BIND_FAILURE));
     }
 
     /**
@@ -158,7 +158,7 @@ public class UserController {
     public ResponseEntity<Result> logout(@RequestParam Long id) {
         log.info("user: {} logout", id);
         UserThreadLocalUtil.THREAD_LOCAL_USER_ID.remove();
-        return ResponseEntity.ok().body(Result.success(AccountConstant.USER_LOGOUT_SUCCESS));
+        return ResponseEntity.ok().body(Result.success(AccountConstant.ACCOUNT_LOGOUT_SUCCESS));
     }
 
     /**

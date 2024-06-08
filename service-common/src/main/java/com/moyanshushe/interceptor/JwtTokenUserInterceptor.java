@@ -47,7 +47,7 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
         }
 
         if (jwtProperties != null) {
-            if (jwtProperties.getUserCheck()) {
+            if (Boolean.TRUE.equals(jwtProperties.getUserCheck())) {
                 // 1、从请求头中获取令牌
                 String token = request.getHeader(jwtProperties.getUserTokenName());
 
@@ -63,7 +63,7 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
                     // 4、令牌校验不通过，响应401 Unauthorized状态码，并阻止执行后续处理器
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 设置401状态码
                 }
-            } else if (jwtProperties.getAdminCheck()){
+            } else if (Boolean.TRUE.equals(jwtProperties.getAdminCheck())){
                 // 1、从请求头中获取令牌
                 String token = request.getHeader(jwtProperties.getAdminTokenName());
 

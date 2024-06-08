@@ -14,6 +14,8 @@ import org.babyfish.jimmer.sql.ast.mutation.SimpleSaveResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
+
 /*
  * Author: Hacoj
  * Version: 1.0
@@ -28,30 +30,30 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public Page<CouponSubstance> get(CouponSpecification couponSpecification) {
+    public Page<CouponSubstance> query(CouponSpecification couponSpecification) {
         return jsqlClient.createQuery(table)
                 .where(couponSpecification)
                 .select(
                         table.fetch(CouponSubstance.class)
                 )
-                .fetchPage(couponSpecification.getPage() == null ? 1 : couponSpecification.getPage(),
+                .fetchPage(couponSpecification.getPage() == null ? 0 : couponSpecification.getPage(),
                         couponSpecification.getPageSize() == null ? 10 : couponSpecification.getPageSize());
     }
 
     @Override
-    public Boolean add(CouponSubstance couponSubstance) {
+    public @NotNull Boolean add(CouponSubstance couponSubstance) {
         SimpleSaveResult<Coupon> result = jsqlClient.save(couponSubstance);
         return result.isModified();
     }
 
     @Override
-    public Boolean update(CouponSubstance couponSubstance) {
+    public @NotNull Boolean update(CouponSubstance couponSubstance) {
         SimpleSaveResult<Coupon> result = jsqlClient.update(couponSubstance.toEntity());
-        return result.isModified();
+        return true;
     }
 
     @Override
-    public Boolean delete(CouponForDelete couponForDelete) {
+    public @NotNull Boolean delete(CouponForDelete couponForDelete) {
         DeleteResult result = jsqlClient.deleteByIds(Coupon.class, couponForDelete.getIds());
         return result.getAffectedRowCount(Coupon.class) == couponForDelete.getIds().size();
     }

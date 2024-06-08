@@ -4,7 +4,7 @@ moyan:
     # MySQL驱动类名
     driver-class-name: com.mysql.cj.jdbc.Driver
     # 数据库连接URL
-    url: jdbc:mysql://localhost:3306/book_sell_db
+    url: jdbc:mysql://localhost:3306/item_sell_db
     # 数据库用户名
     username: root
     # 数据库密码
@@ -72,7 +72,7 @@ moyan:
 
 # 服务器配置
 server:
-  port: 19202
+  port: 19203
 
 # Jimmer ORM配置
 jimmer:

@@ -3,8 +3,8 @@ export com.moyanshushe.model.entity.User
 
 input unsafe UserForVerify {
     id
-    phone!
-    email!
+    phone
+    email
 }
 
 input UserForRegister {
@@ -13,6 +13,10 @@ input UserForRegister {
     email
     password
     captcha: String
+    address? {
+        id
+    }
+    status
 }
 
 input UserForLogin {
@@ -28,8 +32,18 @@ UserForUpdate {
     name
     gender
     age
-    status
     profileUrl
+    address {
+        id
+    }
+}
+
+UserForUpdatePassword {
+    id
+    password
+    email
+    newPassword: String
+    captcha: String
 }
 
 UserForBinding {
@@ -37,4 +51,16 @@ UserForBinding {
     phone
     email
     captcha: String
+}
+
+UserWithoutPassword {
+    id
+    name
+    gender
+    age
+    status
+    profileUrl
+    address {
+        id
+    }
 }

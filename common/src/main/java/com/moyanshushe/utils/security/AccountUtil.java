@@ -34,6 +34,9 @@ public class AccountUtil {
      * @return 如果密码有效则返回true，否则返回false。
      */
     public static boolean checkPassword(String password) {
+        if (password == null) {
+            return false;
+        }
         // 检查密码不为空，长度至少8位，最多20位，并且包含至少一个数字、一个字母
         return PASSWORD_PATTERN.matcher(password).find();
     }
@@ -45,6 +48,9 @@ public class AccountUtil {
      * @return 如果电话号码有效则返回true，否则返回false。
      */
     public static boolean checkPhone(String phone) {
+        if (phone == null) {
+            return false;
+        }
         // 检查电话号码不为空且恰好11位。
         return PHONE_PATTERN.matcher(phone).find();
     }
@@ -56,6 +62,9 @@ public class AccountUtil {
      * @return 如果电子邮件有效则返回true，否则返回false。
      */
     public static boolean checkEmail(String email) {
+        if (email == null) {
+            return false;
+        }
         // 检查电子邮件不为空，包含至少一个"@"字符，并且"@"不在开头或结尾，且符合电子邮件的一般格式
         return EMAIL_PATTERN.matcher(email).find();
     }
@@ -67,6 +76,9 @@ public class AccountUtil {
      * @return 如果名字有效则返回true，否则返回false。
      */
     public static boolean checkName(String name) {
+        if (name == null) {
+            return false;
+        }
         return NAME_PATTERN.matcher(name).find();
     }
 

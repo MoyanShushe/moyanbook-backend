@@ -12,7 +12,7 @@ import org.babyfish.jimmer.Page;
 
 public interface CouponService {
 
-    Page<CouponSubstance> get(CouponSpecification couponSpecification);
+    Page<CouponSubstance> query(CouponSpecification couponSpecification);
 
     Boolean add(CouponSubstance couponSubstance);
 

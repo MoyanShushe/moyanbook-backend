@@ -21,7 +21,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class JwtTokenUserInterceptor implements HandlerInterceptor {
 
     private final JwtProperties jwtProperties;
-    public static final ThreadLocal<Long> threadLocal = new ThreadLocal<>();
 
     public JwtTokenUserInterceptor(JwtProperties jwtProperties) {
         this.jwtProperties = jwtProperties;

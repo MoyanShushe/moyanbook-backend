@@ -21,7 +21,6 @@ import java.util.function.Function;
 @Configuration
 public class JSqlClientConfig {
 
-
     @Bean
     public JSqlClient sqlClient(DruidDataSource dataSource) {
         return JSqlClient

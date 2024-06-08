@@ -29,8 +29,7 @@ public interface Coupon {
     /**
      * 优惠券价格
      */
-    @Null
-    Object price();
+    double price();
 
     /**
      * 优惠券描述
@@ -60,5 +59,10 @@ public interface Coupon {
 
     @ManyToOne
     User user();
+
+    class Status {
+        public static short NORMAL = 1;
+        public short EXPIRED = 2;
+    }
 }
 

@@ -24,7 +24,7 @@ public interface Label {
      */
     String name();
 
-    @ManyToMany()
-    List<Book> books();
+    @ManyToMany(mappedBy = "labels")
+    List<Item> items();
 }
 

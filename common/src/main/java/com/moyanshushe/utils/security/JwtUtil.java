@@ -63,4 +63,5 @@ public class JwtUtil {
                 .parseClaimsJws(token).getBody();
     }
 
+    private JwtUtil() {}
 }

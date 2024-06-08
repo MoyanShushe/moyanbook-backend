@@ -61,10 +61,19 @@ spring:
   threads:
     virtual:
       enabled: true
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
 
 # 服务器配置
 server:
   port: ${server.port}
+
+nacos:
+  discovery:
+    server-addr: ${moyan.nacos.discovery.server-addr}
+
 
 # Jimmer ORM配置
 jimmer:
@@ -84,10 +93,15 @@ jimmer:
             \ \    | |  | | (_) | | (_| | | | |____) | | | | |_| \__ \ | | |  __/   / /
             | |   |_|  |_|\___/|_|\__,_|_| |_|_____/|_| |_|\__,_|___/_| |_|\___|  | |
             \_\                                                                 /_/
-        version: 1.0
+  show-sql: true
+  pretty-sql: true
 
-# 常用工具类配置
 moyanshushe:
+  key:
+    name: ${moyan.key.name}
+    key: ${moyan.key.key}
+    secret: ${moyan.key.secret}
+
   jwt:
     # 管理员接口JWT签名密钥
     admin-secret-key: ${moyan.jwt.admin-secret-key}
@@ -105,3 +119,5 @@ moyanshushe:
     user-token-name: ${moyan.jwt.user-token-name}
     admin-check: true
     user-check: true
+
+

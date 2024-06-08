@@ -1,20 +1,25 @@
 package com.moyanshushe.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.moyanshushe.model.cnoverter.UserEmailConverter;
+import com.moyanshushe.model.cnoverter.UserPasswordConverter;
+import com.moyanshushe.model.cnoverter.UserPhoneConverter;
+import jakarta.annotation.Nullable;
+import org.babyfish.jimmer.jackson.JsonConverter;
 import org.babyfish.jimmer.sql.*;
 
-import javax.validation.constraints.Null;
 import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Entity for table "user"
+ * 用户实体，对应数据库表"user"
  */
 @Entity
-//        (microServiceName = "user-service")
 public interface User {
 
     /**
-     * 用户id，主键
+     * 获取用户id，主键
+     * @return 用户id
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY
@@ -22,67 +27,114 @@ public interface User {
     int id();
 
     /**
-     * 用户名
+     * 获取用户名
+     * @return 用户名
      */
     String name();
 
     /**
-     * 用户年龄
+     * 获取用户年龄
+     * @return 用户年龄，可能为null
      */
-    @Null
+    @Nullable
     Integer age();
 
     /**
-     * 用户性别
+     * 获取用户性别
+     * @return 用户性别，可能为null
      */
-    @Null
+    @Nullable
     Short gender();
 
     /**
-     * 用户邮箱
+     * 获取用户邮箱
+     * @return 用户邮箱，可能为null
      */
-    @Null
+    @Nullable
+//    @JsonConverter(UserEmailConverter.class)
     String email();
 
     /**
-     * 用户手机号
+     * 获取用户手机号
+     * @return 用户手机号，可能为null
      */
-    @Null
+    @Nullable
+//    @JsonConverter(UserPhoneConverter.class)
     String phone();
 
     /**
-     * 用户密码
+     * 获取用户密码
+     * @return 用户密码
      */
+    @JsonConverter(UserPasswordConverter.class)
     String password();
 
+    /**
+     * 获取用户拥有的物品列表
+     * @return 物品列表
+     */
     @OneToMany(mappedBy = "user")
-    List<Book> books();
+    List<Item> items();
 
     /**
-     * 用户状态  0: 正常，1：冻结，2：过期
+     * 获取用户的地址信息
+     * @return 地址信息
      */
-    @Null
+    @ManyToOne
+    Address address();
+
+    /**
+     * 获取用户拥有的优惠券列表
+     * @return 优惠券列表
+     */
+    @OneToMany(mappedBy = "user")
+    List<Coupon> coupons();
+
+    /**
+     * 获取用户的订单信息
+     * @return 订单信息
+     */
+    @OneToOne()
+    @JoinColumn(
+            name = "user_id"
+    )
+    Order order();
+
+    /**
+     * 获取用户状态：0表示正常，1表示冻结，2表示过期
+     * @return 用户状态，可能为null
+     */
+    @Nullable
     Short status();
 
     /**
-     * 用户创建时间
+     * 获取用户创建时间
+     * @return 用户创建时间
      */
     LocalDate createTime();
 
     /**
-     * 用户更新时间
+     * 获取用户更新时间
+     * @return 用户更新时间
      */
     LocalDate updateTime();
 
     /**
-     * 头像网址
+     * 获取用户头像网址
+     * @return 头像网址，可能为null
      */
-    @Null
+    @Nullable
     String profileUrl();
 
     /**
-     * 上一次登录时间
+     * 获取用户上一次登录时间
+     * @return 上一次登录时间
      */
     LocalDate lastLoginTime();
-}
 
+    class Status {
+        public static final short NORMAL = 1;
+        public static final short UNSAFE = 2;
+        public static final short FREEZE = 3;
+    }
+}

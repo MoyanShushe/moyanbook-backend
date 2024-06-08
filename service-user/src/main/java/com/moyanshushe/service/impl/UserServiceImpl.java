@@ -1,5 +1,6 @@
 package com.moyanshushe.service.impl;
 
+import com.moyanshushe.constant.AccountConstant;
 import com.moyanshushe.constant.RedisConstant;
 import com.moyanshushe.constant.VerifyConstant;
 import com.moyanshushe.exception.UnexpectedException;
@@ -61,6 +62,8 @@ public class UserServiceImpl implements UserService {
      * @param user 用户注册信息
      * @return 注册成功返回用户ID，失败返回-1
      */
+
+    // TODO 简化条件分支逻辑
     @Transactional(rollbackFor = {Exception.class})
     public Boolean userRegister(UserForRegister user) {
         // 验证码校验
@@ -77,11 +80,15 @@ public class UserServiceImpl implements UserService {
             } else {
 
                 // 判断用户名是否已存在
-                long count = this.userMapper.findByName(user.getName(), Fetchers.USER_FETCHER).size();
+                long count = userMapper.findByName(user.getName(), Fetchers.USER_FETCHER).size();
 
                 if (count > 0L) {
                     throw new AccountExistsException();
                 } else {
+
+                    if (!userMapper.findByEmail(user.getEmail(), Fetchers.USER_FETCHER).isEmpty()) {
+                        throw new AccountExistsException(AccountConstant.ACCOUNT_EMAIL_EXISTS);
+                    }
 
                     if (user.getAddress() == null) {
                         user.setStatus((short) 1);
@@ -167,7 +174,6 @@ public class UserServiceImpl implements UserService {
             if (passwordDigested.equals(userOptional.get().password())) {
 
                 // 登录成功，设置用户ID到线程本地变量，更新登录时间，记录日志
-                THREAD_LOCAL_USER_ID.set(userOptional.get().id());
                 this.userMapper.updateLoginTime(userOptional.get().id(), LocalDate.now());
 
                 log.info("user login: {}", userOptional.get().id());
@@ -300,13 +306,5 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
-    }
-
-    @Scheduled(cron = "0 0 1 * * ?")
-    public void logout() {
-        Integer id = THREAD_LOCAL_USER_ID.get();
-        THREAD_LOCAL_USER_ID.remove();
-
-        log.info("用户：{} 下线()", id);
     }
 }

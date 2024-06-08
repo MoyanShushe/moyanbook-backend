@@ -10,7 +10,7 @@ import com.moyanshushe.exception.BaseException;
 public class UserNotLoginException extends BaseException {
 
     public UserNotLoginException() {
-        super(AccountConstant.USER_NOT_LOGIN);
+        super(AccountConstant.ACCOUNT_NOT_LOGIN);
     }
 
     public UserNotLoginException(String msg) {

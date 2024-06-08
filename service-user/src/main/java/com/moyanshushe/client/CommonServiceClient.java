@@ -30,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.concurrent.CompletableFuture;
 
 @FeignClient(value = "common-service",
-        qualifiers = "common-service-feign")
+        qualifiers = "common-service-feign-user")
 public interface CommonServiceClient {
 
     @PostMapping("/item/fetch")
