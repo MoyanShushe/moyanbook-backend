@@ -1,0 +1,107 @@
+export com.moyanshushe.model.entity.Item
+    -> package com.moyanshushe.model.dto.item
+
+input ItemForAdd {
+    id
+    name
+    price
+    description
+    status
+
+    images {
+        imageUrl
+    }
+
+    userId
+
+    labels {
+        id
+    }
+}
+
+ItemForDelete {
+    ids: MutableList<Int?>
+    userId: Int?
+}
+
+ItemForConfirm {
+    adminConfirm {
+        admin{
+            id
+        }
+        confirmCode
+    }
+    ids: MutableList<Int?>
+}
+
+ItemForUpdate {
+    id
+    name
+    price
+    description
+    status
+
+    user {
+        id
+    }
+
+    labels {
+        id
+    }
+
+    updatePersonId
+}
+
+ItemSubstance {
+    id
+    name
+    price
+    description
+    status
+
+    images {
+        imageUrl
+    }
+
+    user {
+        id
+        name
+        address {
+            id
+            address
+        }
+    }
+
+    labels {
+        name
+    }
+}
+
+ItemUpdateStatus {
+    id
+    status
+
+    updatePersonId
+}
+
+
+specification ItemSpecification {
+    id
+    like(name)
+    le(price) as maxPrice
+    ge(price) as minPrice
+    status
+
+    flat(user) {
+        valueIn(id) as userIds
+    }
+
+    flat(labels) {
+        valueIn(id) as labelIds
+    }
+
+    page: Int?
+    pageSize: Int?
+
+
+}
