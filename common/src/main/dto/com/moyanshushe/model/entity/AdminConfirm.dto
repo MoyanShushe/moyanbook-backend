@@ -1,0 +1,26 @@
+export com.moyanshushe.model.entity.AdminConfirm
+    -> package com.moyanshushe.model.dto.adminconfirm
+
+AdminConfirmSubstance {
+    id
+    confirmCode
+    items {
+        id
+    }
+    status
+    admin {
+        id
+    }
+}
+
+input AdminConfirmSubstanceInput {
+    id
+    confirmCode
+    items {
+        id
+    }
+    status
+    admin {
+        id
+    }
+}
