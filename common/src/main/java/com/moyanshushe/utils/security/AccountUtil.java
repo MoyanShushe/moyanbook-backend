@@ -3,7 +3,7 @@ package com.moyanshushe.utils.security;
 import java.util.regex.Pattern;
 
 /*
- * @Author：Hacoj
+ * @Author：Napbad
  * @Version：1.0
  * 账户相关验证工具类。
  */

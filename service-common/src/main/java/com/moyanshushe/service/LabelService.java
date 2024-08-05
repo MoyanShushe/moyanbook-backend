@@ -7,7 +7,7 @@ import com.moyanshushe.model.dto.label.LabelSubstance;
 import org.babyfish.jimmer.Page;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 public interface LabelService {

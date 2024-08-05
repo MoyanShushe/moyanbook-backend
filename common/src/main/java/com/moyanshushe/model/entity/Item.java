@@ -1,11 +1,10 @@
 package com.moyanshushe.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import org.babyfish.jimmer.sql.*;
 
 
-import javax.validation.constraints.Null;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,7 +19,8 @@ public interface Item {
      * 书籍id，主键
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY
     )
     int id();
 
@@ -61,8 +61,9 @@ public interface Item {
     @JsonIgnore
     int updatePersonId();
 
+    // TODO 逻辑处理
     @IdView
-    int userId();
+    Integer userId();
 
     /**
      * 书籍所属用户
@@ -71,39 +72,51 @@ public interface Item {
     @JoinColumn(
             name = "user_id"
     )
+    @Nullable
     User user();
 
     @ManyToMany()
     @JoinTable(
-            name = "ITEM_LABEL_MAPPING",
-            joinColumnName = "ITEM_ID",
-            inverseJoinColumnName = "LABEL_ID"
+            name = "item_label_mapping",
+            joinColumnName = "item_id",
+            inverseJoinColumnName = "label_id"
     )
     List<Label> labels();
 
     @OneToMany(mappedBy = "item")
     List<ItemImage> images();
 
-
     @ManyToOne
-    @JoinTable(name = "ORDER_ITEM_MAPPING",
+    @JoinTable(name = "order_item_mapping",
             joinColumnName = "item_id",
             inverseJoinColumnName = "order_id")
-    @Null
+    @Nullable
     Order order();
 
+    @Nullable
+    Integer amount();
+
     @OneToOne(mappedBy = "item")
-    @Null
+    @Nullable
     ItemCode itemCode();
 
     @ManyToOne
     @JoinTable(
-            name = "admin_confirm_item_mapping",
+            name = "member_confirm_item_mapping",
             joinColumnName = "item_id",
             inverseJoinColumnName = "confirm_code"
     )
-    @Null
-    AdminConfirm adminConfirm();
+    @Nullable
+    MemberConfirm memberConfirm();
+
+    @Default("0")
+    @LogicalDeleted(
+            "1"
+    )
+    @Column(
+            name = "is_deleted"
+    )
+    int deleted();
 
     class Status {
         public static final short IN_USER = 00;

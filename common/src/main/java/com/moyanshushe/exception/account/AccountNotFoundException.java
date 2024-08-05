@@ -4,7 +4,7 @@ import com.moyanshushe.constant.AccountConstant;
 import com.moyanshushe.exception.BaseException;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  * 账号不存在异常
  */

@@ -1,7 +1,7 @@
 package com.moyanshushe.utils.verify;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 import java.util.Random;

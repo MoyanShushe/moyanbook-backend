@@ -1,7 +1,7 @@
 package com.moyanshushe.service;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 
@@ -80,6 +80,7 @@ class ItemServiceImplTest {
     void testUpdate() {
         ItemForUpdate itemForUpdate = JsonToObjectUtil.jsonFileToObject("ItemForUpdate", ItemForUpdate.class);
 
+        itemForUpdate.setUpdatePersonId(1);
         Boolean update = itemService.update(itemForUpdate);
         assertTrue(update);
     }

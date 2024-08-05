@@ -1,13 +1,13 @@
 package com.moyanshushe.config;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 
 
 import com.moyanshushe.properties.AliOssProperties;
-import com.moyanshushe.utils.storage.AliOssUtil;
+import com.moyanshushe.utils.AliOssUtil;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

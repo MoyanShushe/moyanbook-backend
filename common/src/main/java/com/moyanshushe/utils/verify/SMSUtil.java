@@ -12,7 +12,7 @@ package com.moyanshushe.utils.verify;//package com.moyanshushe.utils.verify;
 //import java.util.Map;
 //
 ///*
-// * Author: Hacoj
+// * Author: Napbad
 // * Version: 1.0
 // * Description: 使用阿里云短信服务来发送指定短信信息
 // */

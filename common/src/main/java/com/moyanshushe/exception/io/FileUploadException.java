@@ -4,7 +4,7 @@ import com.moyanshushe.constant.FileConstant;
 import com.moyanshushe.exception.BaseException;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 public class FileUploadException extends BaseException {

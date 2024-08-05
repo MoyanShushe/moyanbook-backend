@@ -3,7 +3,7 @@ package com.moyanshushe.exception;
 import com.moyanshushe.constant.AuthorityConstant;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 public class NoAuthorityException extends BaseException{

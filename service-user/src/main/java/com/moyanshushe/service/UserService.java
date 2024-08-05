@@ -29,5 +29,5 @@ public interface UserService {
 
     boolean bind(UserForBinding userForBinding);
 
-    boolean userUpdatePassword(UserForUpdatePassword userForUpdatePassword);
+    boolean updatePassword(UserForUpdatePassword userForUpdatePassword);
 }

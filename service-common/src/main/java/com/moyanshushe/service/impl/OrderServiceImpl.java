@@ -8,12 +8,11 @@ import com.moyanshushe.service.OrderService;
 import org.babyfish.jimmer.Page;
 import org.babyfish.jimmer.sql.ast.mutation.DeleteResult;
 import org.babyfish.jimmer.sql.ast.mutation.SimpleSaveResult;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 @Service
@@ -25,6 +24,7 @@ public class OrderServiceImpl implements OrderService {
         this.mapper = mapper;
     }
 
+    @NotNull
     @Override
     public Boolean add(OrderForAdd order) {
 
@@ -33,11 +33,13 @@ public class OrderServiceImpl implements OrderService {
         return result.getAffectedRowCount(Order.class) == 1;
     }
 
+    @NotNull
     @Override
     public Page<Order> query(OrderSpecification specification) {
-        return mapper.get(specification);
+        return mapper.query(specification);
     }
 
+    @NotNull
     @Override
     public Boolean update(OrderForUpdate orderForUpdate) {
         SimpleSaveResult<Order> result = mapper.update(orderForUpdate);
@@ -45,6 +47,7 @@ public class OrderServiceImpl implements OrderService {
         return result.getAffectedRowCount(Order.class) == 1;
     }
 
+    @NotNull
     @Override
     public Boolean delete(OrderForDelete orderForDelete) {
         DeleteResult result = mapper.delete(orderForDelete);

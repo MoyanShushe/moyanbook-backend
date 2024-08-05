@@ -1,6 +1,6 @@
 package com.moyanshushe.config;
 
-import com.moyanshushe.interceptor.JwtTokenUserInterceptor;
+import com.moyanshushe.interceptor.UserContextInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -11,9 +11,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
-    private final JwtTokenUserInterceptor jwtTokenUserInterceptor;
+    private final UserContextInterceptor jwtTokenUserInterceptor;
 
-    public WebMvcConfiguration(JwtTokenUserInterceptor jwtTokenUserInterceptor) {
+    public WebMvcConfiguration(UserContextInterceptor jwtTokenUserInterceptor) {
         this.jwtTokenUserInterceptor = jwtTokenUserInterceptor;
     }
 

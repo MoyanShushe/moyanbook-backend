@@ -7,6 +7,8 @@ import com.moyanshushe.model.dto.item.ItemForUpdate;
 import com.moyanshushe.model.dto.item.ItemSpecification;
 import com.moyanshushe.model.entity.Item;
 import com.moyanshushe.service.ItemService;
+import com.moyanshushe.utils.AliOssUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.babyfish.jimmer.Page;
 import org.babyfish.jimmer.client.meta.Api;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * ItemController类负责处理所有与书籍管理相关的REST API操作。
  * 它使用ItemService与底层数据层进行交互。
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/item")
 public class ItemController {
 
@@ -31,14 +36,7 @@ public class ItemController {
      */
     private final ItemService itemService;
 
-    /**
-     * ItemController的构造函数，使用ItemService和ObjectMapper初始化。
-     *
-     * @param itemService   管理书籍操作的服务
-     */
-    public ItemController(ItemService itemService) {
-        this.itemService = itemService;
-    }
+    private final AliOssUtil aliOssUtil;
 
     /**
      * 根据给定的规格获取一页书籍的API端点。
@@ -61,6 +59,12 @@ public class ItemController {
     @Api
     @PostMapping("/add")
     public ResponseEntity<Result> add(@RequestBody ItemForAdd itemForAdd) {
+        itemForAdd.getImages().stream()
+                .map(ItemForAdd.TargetOf_images::getImageUrl)
+                .forEach(
+                        aliOssUtil::checkUrlIsAliOss
+                );
+
         itemService.add(itemForAdd);
 
         return ResponseEntity.ok(Result.success());
@@ -77,6 +81,12 @@ public class ItemController {
     public ResponseEntity<Result> update(@RequestBody ItemForUpdate itemForUpdate) {
         itemService.update(itemForUpdate);
 
+        itemForUpdate.getImages().stream()
+                .map(ItemForUpdate.TargetOf_images::getImageUrl)
+                .forEach(
+                        aliOssUtil::checkUrlIsAliOss
+                );
+
         return ResponseEntity.ok(Result.success());
     }
 
@@ -92,5 +102,17 @@ public class ItemController {
         itemService.delete(itemForDelete);
 
         return ResponseEntity.ok(Result.success());
+    }
+
+    /**
+     * 根据给定的规格获取一页书籍的API端点。
+     *
+     * @param specification 书籍查询规格，定义了查询的过滤器和排序
+     * @return 符合规格的书籍实体列表（分页）
+     */
+    @Api
+    @PostMapping("/fetch-public")
+    public Page<Item> fetchPublic(@RequestBody ItemSpecification specification) {
+        return itemService.query(specification);
     }
 }

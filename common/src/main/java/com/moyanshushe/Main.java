@@ -2,7 +2,7 @@ package com.moyanshushe;
 
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or

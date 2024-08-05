@@ -1,7 +1,7 @@
 package com.moyanshushe.utils.log;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 import java.lang.annotation.ElementType;

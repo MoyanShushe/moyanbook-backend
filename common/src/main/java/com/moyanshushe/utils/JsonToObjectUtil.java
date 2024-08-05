@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 public class JsonToObjectUtil {
@@ -58,8 +58,8 @@ public class JsonToObjectUtil {
         }
     }
 
-    public static<T> T jsonFileToObject(String orderForAdd, CollectionType collectionType) {
-        File file = new File(DEFAULT_PATH + orderForAdd + SUFFIX);
+    public static<T> T jsonFileToObject(String name, CollectionType collectionType) {
+        File file = new File(DEFAULT_PATH + name + SUFFIX);
 
         try {
             return mapper.readValue(file, collectionType);

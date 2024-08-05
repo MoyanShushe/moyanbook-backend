@@ -4,11 +4,15 @@ import com.moyanshushe.client.*;
 import com.moyanshushe.constant.AccountConstant;
 import com.moyanshushe.constant.JwtClaimsConstant;
 import com.moyanshushe.constant.VerifyConstant;
+import com.moyanshushe.constant.WebIOConstant;
 import com.moyanshushe.exception.NoAuthorityException;
 import com.moyanshushe.exception.common.InputInvalidException;
 import com.moyanshushe.model.Result;
 import com.moyanshushe.model.dto.address.AddressSpecification;
+import com.moyanshushe.model.dto.address_part1.AddressPart1Specification;
+import com.moyanshushe.model.dto.address_part2.AddressPart2Specification;
 import com.moyanshushe.model.dto.coupon.CouponSpecification;
+import com.moyanshushe.model.dto.coupon.CouponSubstance;
 import com.moyanshushe.model.dto.item.*;
 import com.moyanshushe.model.dto.label.LabelSpecification;
 import com.moyanshushe.model.dto.order.OrderForAdd;
@@ -19,23 +23,21 @@ import com.moyanshushe.model.dto.user.*;
 import com.moyanshushe.model.entity.User;
 import com.moyanshushe.properties.JwtProperties;
 import com.moyanshushe.service.UserService;
-import com.moyanshushe.utils.UserThreadLocalUtil;
-import com.moyanshushe.utils.security.JwtUtil;
+import com.moyanshushe.utils.AliOssUtil;
+import com.moyanshushe.utils.UserContext;
+import com.moyanshushe.utils.JwtUtil;
+import org.babyfish.jimmer.Page;
 import org.babyfish.jimmer.client.meta.Api;
 import org.babyfish.jimmer.sql.ast.tuple.Tuple2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
-
-import static com.moyanshushe.utils.UserThreadLocalUtil.THREAD_LOCAL_USER_ID;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 // 用户控制器类，负责处理用户相关的HTTP请求
 @Api
@@ -45,17 +47,19 @@ public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
     private final JwtProperties jwtProperties;
-    private final CommonServiceClientForUser commonServiceClientForUser;
+    private final CommonServiceClient commonServiceClient;
+    private final AliOssUtil aliOssUtil;
 
     // 构造函数：初始化用户服务和JWT属性
     public UserController(UserService userService,
                           JwtProperties jwtProperties,
-                          CommonServiceClientForUser commonServiceClientForUser) {
+                          CommonServiceClient commonServiceClient, AliOssUtil aliOssUtil) {
         this.userService = userService;
         this.jwtProperties = jwtProperties;
-        this.commonServiceClientForUser = commonServiceClientForUser;
+        this.commonServiceClient = commonServiceClient;
 
         log.info("UserController initialized");
+        this.aliOssUtil = aliOssUtil;
     }
 
     /**
@@ -92,8 +96,8 @@ public class UserController {
         User user = this.userService.userLogin(userForLogin);
         if (user != null) {
             HashMap<String, Object> map = new HashMap<>();
-            map.put(JwtClaimsConstant.USER_ID, user.id());
-            String jwt = JwtUtil.createJWT(this.jwtProperties.getUserSecretKey(), this.jwtProperties.getUserTtl(), map);
+            map.put(JwtClaimsConstant.ID, user.id());
+            String jwt = JwtUtil.createJWT(this.jwtProperties.getSecretKey(), this.jwtProperties.getTtl(), map);
 
             return ResponseEntity.ok(Result.success(new Tuple2<>(user, jwt)));
 
@@ -112,6 +116,7 @@ public class UserController {
     @PostMapping({"/update"})
     public ResponseEntity<Result> update(@RequestBody UserForUpdate userForUpdate) {
         log.info("user update: {}", userForUpdate.getId());
+        aliOssUtil.checkUrlIsAliOss(userForUpdate.getProfileUrl());
 
         boolean isChanged = this.userService.userUpdate(userForUpdate);
 
@@ -125,7 +130,7 @@ public class UserController {
     public ResponseEntity<Result> changePassword(@RequestBody UserForUpdatePassword userForUpdatePassword) {
         log.info("user change password: {}", userForUpdatePassword.getId());
 
-        boolean isUpdated = this.userService.userUpdatePassword(userForUpdatePassword);
+        boolean isUpdated = this.userService.updatePassword(userForUpdatePassword);
 
         return isUpdated
                 ? ResponseEntity.ok(Result.success(AccountConstant.ACCOUNT_CHANGE_SUCCESS))
@@ -161,7 +166,6 @@ public class UserController {
     @PostMapping({"/logout"})
     public ResponseEntity<Result> logout(@RequestParam Long id) {
         log.info("user: {} logout", id);
-        THREAD_LOCAL_USER_ID.remove();
         return ResponseEntity.ok().body(Result.success(AccountConstant.ACCOUNT_LOGOUT_SUCCESS));
     }
 
@@ -188,7 +192,7 @@ public class UserController {
     @Api
     @PostMapping("/item/fetch")
     public ResponseEntity<Result> fetchItem(@RequestBody ItemSpecification specification) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.fetchItems(specification)));
+        return commonServiceClient.fetchItems(specification);
     }
 
     /**
@@ -200,9 +204,9 @@ public class UserController {
     @Api
     @PostMapping("/item/add")
     public ResponseEntity<Result> addItem(@RequestBody ItemForAdd itemForAdd) {
-        itemForAdd.setUserId(THREAD_LOCAL_USER_ID.get());
+        itemForAdd.setUserId(UserContext.getUserId());
 
-        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.addItem(itemForAdd)));
+        return commonServiceClient.addItem(itemForAdd);
     }
 
     /**
@@ -214,11 +218,14 @@ public class UserController {
     @Api
     @PostMapping("/item/update")
     public ResponseEntity<Result> updateItem(@RequestBody ItemForUpdate itemForUpdate) {
+        if (itemForUpdate.getUser() == null) {
+            return ResponseEntity.badRequest().body(Result.error(WebIOConstant.INPUT_INVALID));
+        }
         if (itemForUpdate.getUser().getId() == 0) {
             throw new InputInvalidException();
         }
 
-        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.updateItem(itemForUpdate)));
+        return commonServiceClient.updateItem(itemForUpdate);
     }
 
     /**
@@ -230,9 +237,9 @@ public class UserController {
     @Api
     @PostMapping("/item/delete")
     public ResponseEntity<Result> deleteItem(@RequestBody ItemForDelete itemForDelete) {
-        itemForDelete.setUserId(THREAD_LOCAL_USER_ID.get());
+        itemForDelete.setOperatorId(UserContext.getUserId());
 
-        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.deleteItems(itemForDelete)));
+        return commonServiceClient.deleteItems(itemForDelete);
     }
 
     /**
@@ -244,7 +251,7 @@ public class UserController {
     @Api
     @PostMapping("/label/fetch")
     public ResponseEntity<Result> fetchLabels(@RequestBody LabelSpecification label) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.queryLabels(label)));
+        return commonServiceClient.queryLabels(label);
     }
 
     /**
@@ -255,8 +262,8 @@ public class UserController {
      */
     @Api
     @PostMapping("/file/upload/image")
-    public ResponseEntity<Result> uploadImage(@RequestParam("file") MultipartFile file) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.uploadImage(file)));
+    public CompletableFuture<Result> uploadImage(@RequestParam("file") MultipartFile file) {
+        return commonServiceClient.uploadImage(file);
     }
 
     /**
@@ -268,7 +275,25 @@ public class UserController {
     @Api
     @PostMapping("/address/get")
     public ResponseEntity<Result> getAddress(@RequestBody AddressSpecification addressForQuery) {
-        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.getAddress(addressForQuery)));
+        return commonServiceClient.getAddress(addressForQuery);
+    }
+
+    @Api
+    @PostMapping("address/add")
+    public ResponseEntity<Result> addAddress(@RequestBody AddressSpecification addressForQuery) {
+        return commonServiceClient.getAddress(addressForQuery);
+    }
+
+    @Api
+    @PostMapping("address-part1")
+    public ResponseEntity<Result> getAddressPart1(@RequestBody AddressPart1Specification specification) {
+        return commonServiceClient.readAddressPart1(specification);
+    }
+
+    @Api
+    @PostMapping("address-part2")
+    public ResponseEntity<Result> getAddressPart2(@RequestBody AddressPart2Specification specification) {
+        return commonServiceClient.readAddressPart2(specification);
     }
 
     /**
@@ -280,9 +305,9 @@ public class UserController {
     @Api
     @PostMapping("/order/fetch")
     public ResponseEntity<Result> getOrder(@RequestBody OrderSpecification specification) {
-        specification.setUserId(THREAD_LOCAL_USER_ID.get());
+        specification.setUserId(UserContext.getUserId());
 
-        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.getOrder(specification)));
+        return commonServiceClient.getOrder(specification);
     }
 
     /**
@@ -294,11 +319,12 @@ public class UserController {
     @Api
     @PostMapping("/order/add")
     public ResponseEntity<Result> addOrder(@RequestBody OrderForAdd orderForAdd) {
-        if (orderForAdd.getUserId() != THREAD_LOCAL_USER_ID.get()) {
-            throw new NoAuthorityException();
-        }
+//         TODO  Auth
+//        if (!Objects.equals(orderForAdd.getUserId(), UserContext.getUserId())) {
+//            throw new NoAuthorityException();
+//        }
 
-        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.addOrder(orderForAdd)));
+        return commonServiceClient.addOrder(orderForAdd);
     }
 
     /**
@@ -310,13 +336,18 @@ public class UserController {
     @Api
     @PostMapping("/order/update")
     public ResponseEntity<Result> updateOrder(@RequestBody OrderForUpdate orderForUpdate) {
-        int userId = orderForUpdate.getUserId();
+//          TODO Auth
+//        if (orderForUpdate.getUserId() == null) {
+//            throw new NoAuthorityException();
+//        }
+//
+//        int userId = orderForUpdate.getUserId();
+//
+//        if (userId != UserContext.getUserId()) {
+//            throw new NoAuthorityException();
+//        }
 
-        if (userId != THREAD_LOCAL_USER_ID.get()) {
-            throw new NoAuthorityException();
-        }
-
-        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.updateOrder(orderForUpdate)));
+        return commonServiceClient.updateOrder(orderForUpdate);
     }
 
     /**
@@ -328,11 +359,12 @@ public class UserController {
     @Api
     @PostMapping("/order/delete")
     public ResponseEntity<Result> deleteOrder(@RequestBody OrderForDelete itemForDelete) {
-        if (itemForDelete.getUserId() != THREAD_LOCAL_USER_ID.get()) {
-            throw new NoAuthorityException();
-        }
+        // TODO
+//        if (!Objects.equals(itemForDelete.getUserId(), UserContext.getUserId())) {
+//            throw new NoAuthorityException();
+//        }
 
-        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.deleteOrder(itemForDelete)));
+        return commonServiceClient.deleteOrder(itemForDelete);
     }
 
     /**
@@ -343,10 +375,10 @@ public class UserController {
      */
     @Api
     @PostMapping("/coupon/get")
-    public ResponseEntity<Result> getCoupon(@RequestBody CouponSpecification specification) {
+    public Page<CouponSubstance> getCoupon(@RequestBody CouponSpecification specification) {
         // 调用commonServiceClient的getCoupon方法获取优惠券信息，并将结果封装成成功响应返回
-        specification.setUserId(THREAD_LOCAL_USER_ID.get());
+        specification.setUserId(UserContext.getUserId());
 
-        return ResponseEntity.ok().body(Result.success(commonServiceClientForUser.getCoupon(specification)));
+        return commonServiceClient.getCoupon(specification);
     }
 }

@@ -2,7 +2,6 @@ package com.moyanshushe.model.entity;
 
 import org.babyfish.jimmer.sql.*;
 
-import javax.validation.constraints.Null;
 import java.util.List;
 
 /**
@@ -15,8 +14,7 @@ public interface AddressPart1 {
      * 主键
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id();
 
     /**

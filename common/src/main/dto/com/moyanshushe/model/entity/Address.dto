@@ -22,8 +22,8 @@ specification AddressSpecification {
     page: Int?
     pageSize: Int?
 
-    createPersonId: Int?
-    updatePersonId: Int?
+    createPersonId
+    updatePersonId
 }
 
 AddressForDelete {

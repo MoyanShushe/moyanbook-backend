@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.babyfish.jimmer.jackson.JsonConverter;
 import org.babyfish.jimmer.sql.*;
 import org.babyfish.jimmer.sql.meta.UUIDIdGenerator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 
 import java.util.*;
 import java.time.LocalDateTime;
@@ -12,22 +15,22 @@ import java.time.LocalDateTime;
  * Entity for table "order"
  */
 @Entity
-@Table(name = "ORDER_DETAIL")
+@Table(name = "order_detail")
 public interface Order {
 
     /**
      * 订单id
      */
     @Id
-    @Column(name = "order_id")
     @GeneratedValue(generatorType = UUIDIdGenerator.class)
-    UUID id();
+    UUID orderId();
 
     /**
      * 订单所属用户id
      */
+    // TODO 逻辑
     @IdView
-    int userId();
+    Integer userId();
 
     /**
      * 订单所属用户
@@ -36,6 +39,7 @@ public interface Order {
     @JoinColumn(
             name = "user_id"
     )
+    @Nullable
     User user();
 
     /**

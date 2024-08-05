@@ -1,16 +1,16 @@
 package com.moyanshushe.controller;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 
 import com.moyanshushe.constant.AddressConstant;
 import com.moyanshushe.constant.WebIOConstant;
 import com.moyanshushe.model.Result;
-import com.moyanshushe.model.dto.addresspart2.AddressPart2ForDelete;
-import com.moyanshushe.model.dto.addresspart2.AddressPart2Input;
-import com.moyanshushe.model.dto.addresspart2.AddressPart2Specification;
+import com.moyanshushe.model.dto.address_part2.AddressPart2ForDelete;
+import com.moyanshushe.model.dto.address_part2.AddressPart2Input;
+import com.moyanshushe.model.dto.address_part2.AddressPart2Specification;
 import com.moyanshushe.model.entity.AddressPart2;
 import com.moyanshushe.service.AddressPart2Service;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +42,7 @@ public class AddressPart2Controller {
     public ResponseEntity<Result> createAddressPart2(@RequestBody AddressPart2Input addressPart2Input) {
         try {
             int createdId = addressPart2Service.add(addressPart2Input);
-            return ResponseEntity.ok(Result.success());
+            return ResponseEntity.ok(Result.success(createdId));
         } catch (Exception e) {
             log.error("Error creating address part 1", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Result.error(""));

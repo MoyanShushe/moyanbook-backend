@@ -6,11 +6,11 @@ import com.moyanshushe.model.dto.order.OrderForUpdate;
 import com.moyanshushe.model.dto.order.OrderSpecification;
 import com.moyanshushe.model.entity.Order;
 import org.babyfish.jimmer.Page;
+import org.jetbrains.annotations.NotNull;
 
-import javax.validation.constraints.NotNull;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 public interface OrderService {

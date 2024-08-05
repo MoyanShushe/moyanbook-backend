@@ -8,7 +8,7 @@ import com.moyanshushe.model.entity.Item;
 import org.babyfish.jimmer.Page;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 public interface ItemService {

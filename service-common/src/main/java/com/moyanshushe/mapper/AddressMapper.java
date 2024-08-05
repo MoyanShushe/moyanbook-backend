@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 
@@ -24,12 +24,12 @@ public class AddressMapper {
 
     private final JSqlClient jsqlClient;
     private final AddressTable table;
-    private final AdminTable adminTable;
+    private final MemberTable memberTable;
 
     public AddressMapper(JSqlClient jsqlClient) {
         this.jsqlClient = jsqlClient;
         this.table = AddressTable.$;
-        this.adminTable = AdminTable.$;
+        this.memberTable = MemberTable.$;
     }
 
 
@@ -64,8 +64,8 @@ public class AddressMapper {
                 .where(table.id().in(addressForDelete.getIds()))
                 .select(table.fetch(
                                 Fetchers.ADDRESS_FETCHER
-                                        .admin(
-                                                Fetchers.ADMIN_FETCHER
+                                        .member(
+                                                Fetchers.MEMBER_FETCHER
                                                         .responsibilityArea()
                                         )
                         )
@@ -74,9 +74,9 @@ public class AddressMapper {
         ArrayList<Tuple2<?, ?>> toDelete = new ArrayList<>();
 
         execute.forEach(address -> {
-            if (!address.admin().isEmpty()) {
-                address.admin().forEach(admin -> {
-                    toDelete.add(new Tuple2<>(address.id(), admin.id()));
+            if (!address.member().isEmpty()) {
+                address.member().forEach(member -> {
+                    toDelete.add(new Tuple2<>(address.id(), member.id()));
                 });
 
             }
@@ -84,7 +84,7 @@ public class AddressMapper {
 
 
 
-        jsqlClient.getAssociations(AddressProps.ADMIN)
+        jsqlClient.getAssociations(AddressProps.MEMBER)
                 .deleteAll(toDelete);
 
         jsqlClient.deleteByIds(Address.class, addressForDelete.getIds());

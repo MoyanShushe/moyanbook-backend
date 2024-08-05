@@ -4,7 +4,7 @@ import com.moyanshushe.constant.CommonConstant;
 import com.moyanshushe.exception.BaseException;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 public class DBException extends BaseException {

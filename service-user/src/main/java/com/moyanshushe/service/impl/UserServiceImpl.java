@@ -14,24 +14,22 @@ import com.moyanshushe.model.entity.Fetchers;
 import com.moyanshushe.model.entity.User;
 import com.moyanshushe.model.entity.UserFetcher;
 import com.moyanshushe.service.UserService;
+import com.moyanshushe.utils.UserContext;
 import com.moyanshushe.utils.security.AccountUtil;
 import com.moyanshushe.utils.security.SHA256Encryption;
 import com.moyanshushe.utils.verify.CaptchaGenerator;
-import com.moyanshushe.utils.verify.MailUtil;
+import com.moyanshushe.utils.MailUtil;
+import org.babyfish.jimmer.sql.ast.mutation.SimpleSaveResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import org.babyfish.jimmer.sql.ast.mutation.SimpleSaveResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import static com.moyanshushe.utils.UserThreadLocalUtil.THREAD_LOCAL_USER_ID;
 
 /**
  * 用户服务实现类
@@ -63,57 +61,55 @@ public class UserServiceImpl implements UserService {
      * @return 注册成功返回用户ID，失败返回-1
      */
 
-    // TODO 简化条件分支逻辑
+    // TODO 手机注册
     @Transactional(rollbackFor = {Exception.class})
     public Boolean userRegister(UserForRegister user) {
         // 验证码校验
         String captcha = this.stringRedisTemplate.opsForValue().get(RedisConstant.USER_CAPTCHA + user.getEmail());
 
-        if (captcha != null && captcha.equals(user.getCaptcha())) {
-            // 用户名和密码校验
-            if (!AccountUtil.checkName(user.getName())) {
-                log.error("用户名格式错误");
-                throw new AccountNameErrorException();
-            } else if (!AccountUtil.checkPassword(user.getPassword())) {
-                log.info("密码格式错误");
-                throw new AccountPasswordErrorException();
-            } else {
-
-                // 判断用户名是否已存在
-                long count = userMapper.findByName(user.getName(), Fetchers.USER_FETCHER).size();
-
-                if (count > 0L) {
-                    throw new AccountExistsException();
-                } else {
-
-                    if (!userMapper.findByEmail(user.getEmail(), Fetchers.USER_FETCHER).isEmpty()) {
-                        throw new AccountExistsException(AccountConstant.ACCOUNT_EMAIL_EXISTS);
-                    }
-
-                    if (user.getAddress() == null) {
-                        user.setStatus((short) 1);
-                    }
-
-                    // 密码加密
-                    user.setPassword(SHA256Encryption.getSHA256(user.getPassword()));
-                    // 用户注册
-                    SimpleSaveResult<User> result = this.userMapper.addUser(user);
-                    if (result.getAffectedRowCount(User.class) != 1) {
-                        throw new UnexpectedException();
-                    } else {
-
-                        // 注册成功，清理验证码，记录日志
-                        long id = result.getModifiedEntity().id();
-                        this.stringRedisTemplate.delete(RedisConstant.USER_CAPTCHA + user.getEmail());
-
-                        log.info("user registered: {}", id);
-
-                        return true;
-                    }
-                }
-            }
-        } else {
+        if (captcha == null || !captcha.equals(user.getCaptcha())) {
             throw new CaptchaErrorException();
+        }
+
+        // 用户名和密码校验
+        if (!AccountUtil.checkName(user.getName())) {
+            log.warn("用户名格式错误");
+            throw new AccountNameErrorException();
+        } else if (!AccountUtil.checkPassword(user.getPassword())) {
+            log.warn("密码格式错误");
+            throw new AccountPasswordErrorException();
+        }
+
+        // 判断用户名是否已存在
+        long count = userMapper.findByName(user.getName(), Fetchers.USER_FETCHER).size();
+
+        if (count > 0L) {
+            throw new AccountExistsException();
+        }
+
+        if (!userMapper.findByEmail(user.getEmail(), Fetchers.USER_FETCHER).isEmpty()) {
+            throw new AccountExistsException(AccountConstant.ACCOUNT_EMAIL_EXISTS);
+        }
+
+        if (user.getAddress() == null) {
+            user.setStatus((short) 0);
+        }
+
+        // 密码加密
+        user.setPassword(SHA256Encryption.getSHA256(user.getPassword()));
+        // 用户注册
+        SimpleSaveResult<User> result = this.userMapper.addUser(user);
+        if (result.getAffectedRowCount(User.class) != 1) {
+            throw new UnexpectedException();
+        } else {
+
+            // 注册成功，清理验证码，记录日志
+            long id = result.getModifiedEntity().id();
+            this.stringRedisTemplate.delete(RedisConstant.USER_CAPTCHA + user.getEmail());
+
+            log.info("user registered: {}", id);
+
+            return true;
         }
     }
 
@@ -173,7 +169,7 @@ public class UserServiceImpl implements UserService {
 
             if (passwordDigested.equals(userOptional.get().password())) {
 
-                // 登录成功，设置用户ID到线程本地变量，更新登录时间，记录日志
+                // 登录成功，更新登录时间，记录日志
                 this.userMapper.updateLoginTime(userOptional.get().id(), LocalDate.now());
 
                 log.info("user login: {}", userOptional.get().id());
@@ -202,7 +198,7 @@ public class UserServiceImpl implements UserService {
             return false;
         } else {
 
-            Integer userId = THREAD_LOCAL_USER_ID.get();
+            Integer userId = UserContext.getUserId();
 
             if (userId == null) {
                 throw new UserNotLoginException();
@@ -272,10 +268,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean userUpdatePassword(UserForUpdatePassword userForUpdatePassword) {
-        Integer id = THREAD_LOCAL_USER_ID.get();
+    public boolean updatePassword(UserForUpdatePassword userForUpdatePassword) {
+        Integer id = UserContext.getUserId();
         if (id == null || !id.equals(userForUpdatePassword.getId())) {
             throw new UserNotLoginException();
+        }
+
+
+        String captcha = stringRedisTemplate.opsForValue().get(RedisConstant.USER_CAPTCHA + userForUpdatePassword.getEmail());
+        if (captcha == null){
+            throw new CaptchaErrorException(VerifyConstant.VERIFY_CODE_EXPIRED);
+        } else if (!captcha.equals(userForUpdatePassword.getCaptcha())) {
+            throw new CaptchaErrorException(VerifyConstant.CAPTCHA_ERROR);
         }
 
         if (!AccountUtil.checkPassword(userForUpdatePassword.getPassword())) {
@@ -288,12 +292,7 @@ public class UserServiceImpl implements UserService {
             throw new DBException();
         }
 
-        String captcha = stringRedisTemplate.opsForValue().get(RedisConstant.USER_CAPTCHA + userForUpdatePassword.getEmail());
-        if (captcha == null){
-            throw new CaptchaErrorException(VerifyConstant.VERIFY_CODE_EXPIRED);
-        } else if (!captcha.equals(userForUpdatePassword.getCaptcha())) {
-            throw new CaptchaErrorException(VerifyConstant.CAPTCHA_ERROR);
-        }
+
 
         if (AccountUtil.checkPassword(userForUpdatePassword.getPassword())) {
             // 密码加密

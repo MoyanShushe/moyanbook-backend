@@ -1,13 +1,13 @@
 package com.moyanshushe.service;
 
-import com.moyanshushe.model.dto.addresspart1.AddressPart1ForDelete;
-import com.moyanshushe.model.dto.addresspart1.AddressPart1Input;
-import com.moyanshushe.model.dto.addresspart1.AddressPart1Specification;
+import com.moyanshushe.model.dto.address_part1.AddressPart1ForDelete;
+import com.moyanshushe.model.dto.address_part1.AddressPart1Input;
+import com.moyanshushe.model.dto.address_part1.AddressPart1Specification;
 import com.moyanshushe.model.entity.AddressPart1;
 import org.babyfish.jimmer.Page;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 public interface AddressPart1Service {

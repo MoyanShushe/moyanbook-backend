@@ -1,12 +1,12 @@
 package com.moyanshushe.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.moyanshushe.model.cnoverter.UserPasswordConverter;
+import com.moyanshushe.model.cnoverter.PasswordConverter;
 import jakarta.annotation.Nullable;
 import org.babyfish.jimmer.jackson.JsonConverter;
 import org.babyfish.jimmer.sql.*;
 
-import javax.validation.constraints.Null;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,8 +21,7 @@ public interface User {
      * @return 用户id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id();
 
     /**
@@ -65,7 +64,7 @@ public interface User {
      * 获取用户密码
      * @return 用户密码
      */
-    @JsonConverter(UserPasswordConverter.class)
+    @JsonConverter(PasswordConverter.class)
     String password();
 
     /**
@@ -81,7 +80,7 @@ public interface User {
      */
     @ManyToOne
     @OnDissociate(DissociateAction.SET_NULL)
-    @Null
+    @Nullable
     Address address();
 
     /**
@@ -96,7 +95,7 @@ public interface User {
      * @return 订单信息
      */
     @OneToOne(mappedBy = "user")
-    @Null
+    @Nullable
     Order order();
 
     /**
@@ -105,6 +104,9 @@ public interface User {
      */
     @Nullable
     Short status();
+
+
+    int type();
 
     /**
      * 获取用户创建时间
@@ -131,8 +133,32 @@ public interface User {
      */
     LocalDate lastLoginTime();
 
+    @IdView("comment")
+    List<Integer> commentId();
+
+    @OneToMany(mappedBy = "commenter")
+    List<Comment> comment();
+
+    @IdView("commentLike")
+    List<Integer> commentLikeId();
+
+    @OneToMany(mappedBy = "user")
+    List<CommentLike> commentLike();
+
     @JsonIgnore
     int updatePersonId();
+
+    @JsonIgnore
+    int createPersonId();
+
+    @Default("0")
+    @LogicalDeleted(
+            value = "1"
+    )
+    @Column(
+            name = "is_deleted"
+    )
+    int deleted();
 
     class Status {
         public static final short NORMAL = 1;
@@ -140,5 +166,12 @@ public interface User {
         public static final short FREEZE = 3;
 
         private Status() {}
+    }
+
+    class Type {
+        public static final short NORMAL_USER = 1;
+        public static final short STORE_USER = 2;
+
+        private Type() {}
     }
 }

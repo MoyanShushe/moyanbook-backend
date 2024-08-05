@@ -1,7 +1,7 @@
 package com.moyanshushe.config;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 

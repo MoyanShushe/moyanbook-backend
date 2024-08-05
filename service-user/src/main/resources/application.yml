@@ -14,7 +14,6 @@ spring:
     password: ${moyan.datasource.password}
     # 数据源类型，使用Druid连接池
     type: ${moyan.datasource.type}
-
   # Redis配置
   data:
     redis:
@@ -57,24 +56,24 @@ spring:
         mime:
           parameterization: ${moyan.mail.properties.mail.mime.parameterization}
   application:
-    name: user-service
+    name: service-user
   cloud:
     openfeign:
       okhttp:
         enabled: true
-#    nacos:
-#      discovery:
-#        username: ${moyan.nacos.discovery.username}
-#        password: ${moyan.nacos.discovery.password}
+    nacos:
+      discovery:
+        server-addr: ${moyan.nacos.discovery.server-addr}
+        username: ${moyan.nacos.discovery.username}
+        password: ${moyan.nacos.discovery.password}
+        group: ${moyan.nacos.discovery.group}
+        namespace: ${moyan.nacos.discovery.namespace}
   threads:
     virtual:
       enabled: true
+  main:
+    allow-bean-definition-overriding: true
 
-nacos:
-  discovery:
-    server-addr: ${moyan.nacos.discovery.server-addr}
-#    username: ${moyan.nacos.discovery.username}
-#    password: ${moyan.nacos.discovery.password}
 
 # 服务器配置
 server:
@@ -108,11 +107,11 @@ jimmer:
 moyanshushe:
   jwt:
     # 管理员接口JWT签名密钥
-    admin-secret-key: ${moyan.jwt.admin-secret-key}
+    member-secret-key: ${moyan.jwt.member-secret-key}
     # 管理员接口JWT有效期
-    admin-ttl: ${moyan.jwt.admin-ttl}
+    member-ttl: ${moyan.jwt.member-ttl}
     # 管理员接口请求头中JWT的字段名
-    admin-token-name: ${moyan.jwt.admin-token-name}
+    member-token-name: ${moyan.jwt.member-token-name}
     #
 
     # 用户接口JWT签名密钥
@@ -121,5 +120,5 @@ moyanshushe:
     user-ttl: ${moyan.jwt.user-ttl}
     # 用户接口请求头中JWT的字段名
     user-token-name: ${moyan.jwt.user-token-name}
-    admin-check: true
+    member-check: true
     user-check: true

@@ -11,7 +11,12 @@ repositories {
     mavenCentral()
 }
 
+val jimmerVersion = "0.8.104"
+
 dependencies {
+//    implementation("org.babyfish.jimmer:jimmer-spring-boot-starter:${jimmerVersion}")
+//    implementation("org.babyfish.jimmer:jimmer-sql:${jimmerVersion}")
+//    annotationProcessor("org.babyfish.jimmer:jimmer-apt:${jimmerVersion}")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }

@@ -1,5 +1,5 @@
 export com.moyanshushe.model.entity.AddressPart1
-    -> package com.moyanshushe.model.dto.addresspart1
+    -> package com.moyanshushe.model.dto.address_part1
 
 input AddressPart1Input {
     id

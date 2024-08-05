@@ -15,8 +15,7 @@ public interface Label {
      * 标签id，主键
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id();
 
     /**

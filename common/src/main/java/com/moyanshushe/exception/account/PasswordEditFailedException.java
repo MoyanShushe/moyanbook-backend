@@ -3,7 +3,7 @@ package com.moyanshushe.exception.account;
 import com.moyanshushe.exception.BaseException;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  * 密码修改失败异常
  */

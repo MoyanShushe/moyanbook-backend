@@ -3,7 +3,7 @@ package com.moyanshushe.service.impl;
 /*
  * AddressService的实现类，负责处理与地址相关的业务逻辑。
  *
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 
@@ -16,10 +16,11 @@ import com.moyanshushe.service.AddressService;
 import org.babyfish.jimmer.Page;
 import org.babyfish.jimmer.sql.ast.mutation.DeleteResult;
 import org.babyfish.jimmer.sql.ast.mutation.SimpleSaveResult;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
+
 
 @Service
 public class AddressServiceImpl implements AddressService {

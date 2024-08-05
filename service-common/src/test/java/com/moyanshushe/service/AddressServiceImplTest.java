@@ -1,7 +1,7 @@
 package com.moyanshushe.service;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 
@@ -10,6 +10,7 @@ import com.moyanshushe.model.dto.address.AddressSpecification;
 import com.moyanshushe.model.dto.address.AddressSubstance;
 import com.moyanshushe.model.entity.Address;
 import org.babyfish.jimmer.Page;
+import org.babyfish.jimmer.sql.JSqlClient;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class AddressServiceImplTest {
 
     @Autowired
+    private JSqlClient jSqlClient;
+
+    @Autowired
     private AddressService addressService;
 
     @Test
@@ -39,6 +43,8 @@ class AddressServiceImplTest {
         ofAddressPart2.setId(1);
         substance.setAddressPart1(ofAddressPart1);
         substance.setAddressPart2(ofAddressPart2);
+        substance.setCreatePersonId(1);
+        substance.setUpdatePersonId(1);
 
         Boolean added = addressService.add(substance);
         Boolean added1 = addressService.add(substance);
@@ -79,6 +85,8 @@ class AddressServiceImplTest {
         substance.setAddress("test address2");
         substance.setAddressPart1(targetOfAddressPart1);
         substance.setAddressPart2(targetOfAddressPart2);
+        substance.setCreatePersonId(1);
+        substance.setUpdatePersonId(1);
 
         Boolean added = addressService.add(substance);
         assertTrue(added);
@@ -101,12 +109,19 @@ class AddressServiceImplTest {
     @Order(4)
     void testDelete() {
         AddressForDelete addressForDelete = new AddressForDelete();
-        Page<Address> page = addressService.query(new AddressSpecification());
-        List<Integer> list = page.getRows().stream().filter(
+        AddressSpecification specification = new AddressSpecification();
+        specification.setPageSize(20);
+        Page<Address> page;
+        List<Integer> list;
+
+        page = addressService.query(specification);
+
+        list = page.getRows().stream().filter(
                 addressSubstance -> addressSubstance.id() > 5
         ).map(
                 addressSubstance -> Math.toIntExact(addressSubstance.id())
         ).toList();
+
 
         addressForDelete.setIds(list);
 

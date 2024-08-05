@@ -1,8 +1,8 @@
 package com.moyanshushe.model.entity;
 
 import org.babyfish.jimmer.sql.*;
+import org.jetbrains.annotations.Nullable;
 
-import javax.validation.constraints.Null;
 import java.util.List;
 
 /**
@@ -15,8 +15,7 @@ public interface AddressPart2 {
      * id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id();
 
     /**
@@ -27,7 +26,7 @@ public interface AddressPart2 {
     /**
      * 隶属于
      */
-    @Null
+    @Nullable
     Integer parentAddress();
 
     @OneToMany(mappedBy = "addressPart2")

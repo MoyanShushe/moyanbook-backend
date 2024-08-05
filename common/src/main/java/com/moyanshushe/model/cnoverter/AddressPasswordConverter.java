@@ -4,7 +4,7 @@ import com.moyanshushe.constant.AccountConstant;
 import org.babyfish.jimmer.jackson.Converter;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 public class AddressPasswordConverter implements Converter<String, String> {

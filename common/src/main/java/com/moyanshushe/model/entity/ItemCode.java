@@ -1,8 +1,9 @@
 package com.moyanshushe.model.entity;
 
 import org.babyfish.jimmer.sql.*;
+import org.jetbrains.annotations.Nullable;
 
-import javax.validation.constraints.Null;
+
 
 /**
  * 物件码
@@ -11,8 +12,7 @@ import javax.validation.constraints.Null;
 public interface ItemCode {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id();
 
     /**
@@ -32,7 +32,7 @@ public interface ItemCode {
     Integer itemId();
 
     @OneToOne
-    @Null
+    @Nullable
     @OnDissociate(DissociateAction.SET_NULL)
     Item item();
 }

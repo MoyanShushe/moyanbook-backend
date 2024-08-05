@@ -1,7 +1,7 @@
 package com.moyanshushe.service;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 
@@ -121,20 +121,26 @@ class CouponServiceImplTest {
     void testDelete() {
         CouponForDelete couponForDelete = new CouponForDelete();
         Page<CouponSubstance> page = couponService.query(new CouponSpecification());
-        List<Integer> list = page.getRows().stream().filter(
-                couponSubstance -> {
-                    assertNotNull(couponSubstance.getId());
-                    return couponSubstance.getId() > 5;
-                }
-        ).map(
-                couponSubstance -> {
-                    assertNotNull(couponSubstance.getId());
-                    return Math.toIntExact(couponSubstance.getId());
-                }
-        ).toList();
+        List<Integer> list = null;
+        while (page.getTotalRowCount() > 5) {
+            page = couponService.query(new CouponSpecification());
+            list = page.getRows().stream().filter(
+                    couponSubstance -> {
+                        assertNotNull(couponSubstance.getId());
+                        return couponSubstance.getId() > 5;
+                    }
+            ).map(
+                    couponSubstance -> {
+                        assertNotNull(couponSubstance.getId());
+                        return Math.toIntExact(couponSubstance.getId());
+                    }
+            ).toList();
 
-        couponForDelete.setIds(list);
+            couponForDelete.setIds(list);
 
-        assertTrue(couponService.delete(couponForDelete));
+            assertTrue(couponService.delete(couponForDelete));
+        }
+
+
     }
 }

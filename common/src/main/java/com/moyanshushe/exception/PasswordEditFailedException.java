@@ -1,7 +1,7 @@
 package com.moyanshushe.exception;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  * 密码修改失败异常
  */

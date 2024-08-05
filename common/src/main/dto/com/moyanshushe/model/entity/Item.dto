@@ -1,6 +1,8 @@
 export com.moyanshushe.model.entity.Item
     -> package com.moyanshushe.model.dto.item
 
+import com.moyanshushe.model.OrderRule
+
 input ItemForAdd {
     id
     name
@@ -21,12 +23,12 @@ input ItemForAdd {
 
 ItemForDelete {
     ids: MutableList<Int?>
-    userId: Int?
+    operatorId: Int?
 }
 
 ItemForConfirm {
-    adminConfirm {
-        admin{
+    memberConfirm {
+        member{
             id
         }
         confirmCode
@@ -47,6 +49,10 @@ ItemForUpdate {
 
     labels {
         id
+    }
+
+    images {
+        imageUrl
     }
 
     updatePersonId
@@ -75,6 +81,10 @@ ItemSubstance {
     labels {
         name
     }
+
+    createTime
+    updatePersonId
+    updateTime
 }
 
 ItemUpdateStatus {
@@ -84,6 +94,26 @@ ItemUpdateStatus {
     updatePersonId
 }
 
+ItemPublicView {
+    id
+    name
+    price
+    description
+    status
+
+    images {
+        imageUrl
+    }
+
+    user {
+        id
+        name
+    }
+
+    labels {
+        name
+    }
+}
 
 specification ItemSpecification {
     id
@@ -103,5 +133,8 @@ specification ItemSpecification {
     page: Int?
     pageSize: Int?
 
-
+    orderByPrice: OrderRule?
+    orderByCreateTime: OrderRule?
+    orderByUpdateTime: OrderRule?
 }
+

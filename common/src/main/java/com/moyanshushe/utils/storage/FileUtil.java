@@ -3,7 +3,7 @@ package com.moyanshushe.utils.storage;
 import com.moyanshushe.constant.FileConstant;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 public class FileUtil {

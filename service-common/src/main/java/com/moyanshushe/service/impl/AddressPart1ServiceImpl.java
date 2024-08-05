@@ -1,8 +1,8 @@
 package com.moyanshushe.service.impl;
 
-import com.moyanshushe.model.dto.addresspart1.AddressPart1ForDelete;
-import com.moyanshushe.model.dto.addresspart1.AddressPart1Input;
-import com.moyanshushe.model.dto.addresspart1.AddressPart1Specification;
+import com.moyanshushe.model.dto.address_part1.AddressPart1ForDelete;
+import com.moyanshushe.model.dto.address_part1.AddressPart1Input;
+import com.moyanshushe.model.dto.address_part1.AddressPart1Specification;
 import com.moyanshushe.model.entity.AddressPart1;
 import com.moyanshushe.model.entity.AddressPart1Table;
 import com.moyanshushe.service.AddressPart1Service;
@@ -12,7 +12,7 @@ import org.babyfish.jimmer.sql.ast.mutation.SimpleSaveResult;
 import org.springframework.stereotype.Service;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 

@@ -56,7 +56,7 @@ spring:
         mime:
           parameterization: ${moyan.mail.properties.mail.mime.parameterization}
   application:
-    name: common-service
+    name: service-common
 
   threads:
     virtual:
@@ -65,14 +65,17 @@ spring:
     openfeign:
       okhttp:
         enabled: true
-
+    nacos:
+      discovery:
+        server-addr: ${moyan.nacos.discovery.server-addr}
+        username: ${moyan.nacos.discovery.username}
+        password: ${moyan.nacos.discovery.password}
+        group: ${moyan.nacos.discovery.group}
+        namespace: ${moyan.nacos.discovery.namespace}
 # 服务器配置
 server:
   port: ${server.port}
 
-nacos:
-  discovery:
-    server-addr: ${moyan.nacos.discovery.server-addr}
 
 
 # Jimmer ORM配置
@@ -104,11 +107,11 @@ moyanshushe:
 
   jwt:
     # 管理员接口JWT签名密钥
-    admin-secret-key: ${moyan.jwt.admin-secret-key}
+    member-secret-key: ${moyan.jwt.member-secret-key}
     # 管理员接口JWT有效期
-    admin-ttl: ${moyan.jwt.admin-ttl}
+    member-ttl: ${moyan.jwt.member-ttl}
     # 管理员接口请求头中JWT的字段名
-    admin-token-name: ${moyan.jwt.admin-token-name}
+    member-token-name: ${moyan.jwt.member-token-name}
     #
 
     # 用户接口JWT签名密钥
@@ -117,7 +120,7 @@ moyanshushe:
     user-ttl: ${moyan.jwt.user-ttl}
     # 用户接口请求头中JWT的字段名
     user-token-name: ${moyan.jwt.user-token-name}
-    admin-check: true
+    member-check: true
     user-check: true
   alioss:
     endpoint: ${moyan.oss.endpoint}

@@ -1,29 +1,24 @@
 export com.moyanshushe.model.entity.Admin
     -> package com.moyanshushe.model.dto.admin
 
-input unsafe AdminForRegister {
-    id
-    name
-    gender
-    profileUrl?
-    email
-    phone
-    password
-    address{
-        id
-    }
-//    responsibilityArea {
-//        id
-//    }
-    captcha: String
 
-    createPersonId
+input unsafe AdminForVerify {
+    id
+    phone
+    email
 }
 
-input AdminForVerify {
+input AdminForRegister {
     id
-    phone
+    name
     email
+    password
+    captcha: String
+    address {
+        id
+    }
+    status
+    type
 }
 
 input AdminForLogin {
@@ -35,43 +30,27 @@ input AdminForLogin {
 }
 
 AdminForUpdate {
-     id
-     name
-     gender
-     profileUrl
-     address {
-         id
-     }
+    id
+    name
+    gender
+    age
+    profileUrl
+    address {
+        id
+    }
+}
 
-     updatePersonId
- }
-
- AdminForUpdatePassword {
-     id
-     password
-     email
-     phone?
-     newPassword: String
-     captcha: String
-
-     updatePersonId
- }
+AdminForUpdatePassword {
+    id
+    password
+    email
+    newPassword: String
+    captcha: String
+}
 
 AdminForBinding {
     id
     phone
     email
     captcha: String
-
-    updatePersonId
-}
-
-AdminForUpdateResponsibilityArea {
-    id
-    responsibilityArea {
-        id
-    }
-    captcha: String
-
-    updatePersonId
 }

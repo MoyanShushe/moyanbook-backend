@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 @Component
@@ -30,9 +30,12 @@ public class OrderMapper {
         return jsqlClient.save(order.toEntity());
     }
 
-    public Page<Order> get(OrderSpecification specification) {
+    public Page<Order> query(OrderSpecification specification) {
         return jsqlClient.createQuery(table)
                 .where(specification)
+                .orderBy(
+                        table.createTime().asc()
+                )
                 .select(
                         table
                 )

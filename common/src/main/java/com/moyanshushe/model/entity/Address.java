@@ -3,7 +3,6 @@ package com.moyanshushe.model.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.babyfish.jimmer.sql.*;
 
-import javax.validation.constraints.Null;
 import java.util.List;
 
 /**
@@ -13,8 +12,7 @@ import java.util.List;
 public interface Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id();
 
     /**
@@ -26,7 +24,7 @@ public interface Address {
     @ManyToMany(
             mappedBy = "responsibilityArea"
     )
-    List<Admin> admin();
+    List<Member> member();
 
     @ManyToOne
     @JoinColumn(name = "address_part1")

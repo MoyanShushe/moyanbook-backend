@@ -1,14 +1,14 @@
 package com.moyanshushe.controller;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 
 import com.moyanshushe.constant.FileConstant;
 import com.moyanshushe.exception.io.FileUploadException;
 import com.moyanshushe.model.Result;
-import com.moyanshushe.utils.storage.AliOssUtil;
+import com.moyanshushe.utils.AliOssUtil;
 import com.moyanshushe.utils.storage.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.babyfish.jimmer.client.meta.Api;

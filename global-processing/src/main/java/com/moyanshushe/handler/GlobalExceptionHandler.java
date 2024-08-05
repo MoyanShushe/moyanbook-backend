@@ -1,7 +1,7 @@
 package com.moyanshushe.handler;
 
 /*
- * Author: Hacoj
+ * Author: Napbad
  * Version: 1.0
  */
 
@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.sql.SQLException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -29,6 +31,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = BaseException.class)
     public ResponseEntity<Result> handleBaseException(BaseException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Result.error(ex.getMessage()));
+    }
+
+    @ExceptionHandler(value = SQLException.class)
+    public ResponseEntity<Result> handleSQLException(Exception ex) {
+        ex.printStackTrace();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Result.error("数据库异常"));
     }
 
 }

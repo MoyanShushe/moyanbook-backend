@@ -1,9 +1,7 @@
 package com.moyanshushe.model.entity;
 
 import org.babyfish.jimmer.sql.*;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDateTime;
 
@@ -17,8 +15,7 @@ public interface Coupon {
      * 优惠券id，主键
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id();
 
     /**
@@ -51,12 +48,14 @@ public interface Coupon {
      */
     LocalDateTime expirationTime();
 
+    // TODO 逻辑解决
     /**
      * 优惠券所属用户id
      */
     @IdView
-    int userId();
+    Integer userId();
 
+    @Nullable
     @ManyToOne
     User user();
 
